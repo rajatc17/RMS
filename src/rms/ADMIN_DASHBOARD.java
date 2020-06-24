@@ -672,6 +672,22 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
         desc.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
         desc.setForeground(new java.awt.Color(255, 255, 255));
         desc.setBorder(null);
+        desc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descActionPerformed(evt);
+            }
+        });
+        desc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                descKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                descKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                descKeyTyped(evt);
+            }
+        });
 
         up.setBackground(new java.awt.Color(0, 0, 0));
         up.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
@@ -1135,6 +1151,39 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
         jDialog1.dispose();
         return;
     }//GEN-LAST:event_NOActionPerformed
+
+    private void descKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descKeyTyped
+
+    }//GEN-LAST:event_descKeyTyped
+
+    private void descKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descKeyPressed
+
+    }//GEN-LAST:event_descKeyPressed
+
+    private void descActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descActionPerformed
+ 
+    }//GEN-LAST:event_descActionPerformed
+
+    private void descKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descKeyReleased
+      String src = desc.getText();
+        try
+        { 
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select * from item where Description like '"+src+"%'");
+            ResultSet rs=ps.executeQuery();
+            DefaultTableModel tm=(DefaultTableModel)jTable2.getModel();
+            tm.setRowCount(0);
+            while(rs.next())
+            {   
+                Object o[]={rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)};
+                tm.addRow(o);
+            }
+        }
+    catch(Exception e)
+    {   
+        JOptionPane.showMessageDialog(this,e);
+    }
+    }//GEN-LAST:event_descKeyReleased
 
     /**
      * @param args the command line arguments
