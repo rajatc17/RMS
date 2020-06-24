@@ -203,6 +203,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
       
     }
     public ITEM_SELECTION(String cashier,String customer) {
+        this.cashier=cashier;
         initComponents();
         FC.getTableHeader().setFont(new Font("Bahnschrift", Font.BOLD, 14));
         FC.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -254,6 +255,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         WELCOME1 = new javax.swing.JLabel();
         WELCOME = new javax.swing.JLabel();
         cart_reset = new javax.swing.JButton();
+        BACK = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         HEADER = new javax.swing.JLabel();
         PANEL = new javax.swing.JPanel();
@@ -347,6 +349,14 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
             }
         });
 
+        BACK.setFont(new java.awt.Font("Bahnschrift", 1, 14)); // NOI18N
+        BACK.setText("BACK TO CASHIER DASHBOARD");
+        BACK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BACKActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -359,14 +369,6 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 .addGap(85, 85, 85)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(MC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TO, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(VO, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(VO1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
-                .addGap(46, 46, 46))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(WELCOME1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -387,6 +389,15 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                         .addGap(153, 153, 153)
                         .addComponent(jLabel7)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BACK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MC, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TO, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                    .addComponent(VO, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(VO1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(46, 46, 46))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,7 +426,9 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(cart_reset, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(BACK, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 700));
@@ -701,6 +714,12 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         }
     }//GEN-LAST:event_DECActionPerformed
 
+    private void BACKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BACKActionPerformed
+        this.dispose();
+        CASHIER_DASHBOARD ob = new CASHIER_DASHBOARD(ITEM_SELECTION.cashier);
+        ob.setVisible(true);
+    }//GEN-LAST:event_BACKActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -740,6 +759,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel A;
     private javax.swing.JPanel B;
+    private javax.swing.JButton BACK;
     private javax.swing.JPanel C;
     private com.toedter.calendar.JDateChooser DATE;
     private javax.swing.JButton DEC;
