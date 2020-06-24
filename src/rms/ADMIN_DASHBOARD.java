@@ -83,6 +83,8 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
         jDialog1 = new javax.swing.JDialog();
         dr = new javax.swing.JLabel();
         HEADER2 = new javax.swing.JLabel();
+        YES = new javax.swing.JButton();
+        NO = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         SELECTION = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -149,11 +151,26 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
 
         dr.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
         dr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        dr.setText("Administrator Dashboard");
 
         HEADER2.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         HEADER2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         HEADER2.setText("DELETE THE FOLLOWING RECORD:");
+
+        YES.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        YES.setText("YES");
+        YES.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                YESActionPerformed(evt);
+            }
+        });
+
+        NO.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        NO.setText("NO");
+        NO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NOActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -162,9 +179,15 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
             .addGroup(jDialog1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(HEADER2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(HEADER2, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
                     .addComponent(dr, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(YES, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(NO, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(129, 129, 129))
         );
         jDialog1Layout.setVerticalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,8 +195,12 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(HEADER2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dr, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addComponent(dr, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(YES, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NO, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -830,6 +857,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void MUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MUActionPerformed
+        jTable2.clearSelection();
         HEADER.setText("Manage Users and set privileges");
         PANEL.removeAll();
         PANEL.add(A);
@@ -838,6 +866,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     }//GEN-LAST:event_MUActionPerformed
 
     private void MIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MIActionPerformed
+        jTable1.clearSelection();
         HEADER.setText("Manage Items");
         PANEL.removeAll();
         PANEL.add(B);
@@ -939,20 +968,28 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       if(jTable1.getSelectionModel().isSelectionEmpty())
+       
+        if(jTable1.getSelectionModel().isSelectionEmpty())
         {
             JOptionPane.showMessageDialog(this,"PLEASE SELECT A TUPLE TO CONTINUE!");
             return;
         }
        else
        {
+           
            int row = jTable1.getSelectedRow();
            String value = "Username : "+jTable1.getModel().getValueAt(row,0).toString()+
-            "\nName : "+jTable1.getModel().getValueAt(row,1).toString()+
-            "\nPassword: "+jTable1.getModel().getValueAt(row,2).toString()+
-            "\nPrivilege: "+jTable1.getModel().getValueAt(row,3).toString();
+            "\n Name : "+jTable1.getModel().getValueAt(row,1).toString()+
+            "\n Password: "+jTable1.getModel().getValueAt(row,2).toString()+
+            "\n Privilege: "+jTable1.getModel().getValueAt(row,3).toString();
            dr.setText(value);
+           
+           jDialog1.setLocationRelativeTo(null);
+           jDialog1.setSize(750,210);
            jDialog1.setVisible(true);
+           jDialog1.setEnabled(true);
+           this.setEnabled(false);
+           
        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -1006,7 +1043,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,e);
             }
             cid.setText("");cn.setText(username);ph.setText("");
-            update(jTable2);
+            update2(jTable2);
             
         }
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -1020,7 +1057,28 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
+        if(jTable2.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this,"PLEASE SELECT A TUPLE TO CONTINUE!");
+            return;
+        }
+       else
+       {
+           
+           int row = jTable2.getSelectedRow();
+           String value = "ICode : "+jTable2.getModel().getValueAt(row,0).toString()+
+            "\n Name : "+jTable2.getModel().getValueAt(row,1).toString()+
+            "\n Price: "+jTable2.getModel().getValueAt(row,2).toString()+
+            "\n Type: "+jTable2.getModel().getValueAt(row,3).toString();
+           dr.setText(value);
+           
+           jDialog1.setLocationRelativeTo(null);
+           jDialog1.setSize(750,210);
+           jDialog1.setVisible(true);
+           jDialog1.setEnabled(true);
+           this.setEnabled(false);
+           
+       }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
@@ -1030,6 +1088,53 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void YESActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_YESActionPerformed
+        this.setEnabled(true);
+      
+       int row = jTable1.getSelectedRow();
+       int row2 = jTable2.getSelectedRow();
+        if(!jTable1.getSelectionModel().isSelectionEmpty())
+        {    
+        String user = jTable1.getModel().getValueAt(row, 0).toString();
+        try
+        {
+            Connection con=Connectivity.getConnection();
+            PreparedStatement ps=con.prepareStatement("delete from login where LUser=?");
+            ps.setString(1,user);
+            int status=ps.executeUpdate();
+            con.close();
+        }
+        catch(Exception e){ JOptionPane.showMessageDialog(this,e);}
+        }
+        
+        if(!jTable2.getSelectionModel().isSelectionEmpty())
+        {
+        String code = jTable2.getModel().getValueAt(row2, 0).toString();
+        try
+        {
+            Connection con=Connectivity.getConnection();
+            PreparedStatement ps=con.prepareStatement("delete from item where ICode=?");
+            ps.setString(1,code);
+            int status=ps.executeUpdate();
+            con.close();
+        }
+        catch(Exception e){ JOptionPane.showMessageDialog(this,e);}
+        
+        }
+        
+        update(jTable1);
+        update2(jTable2);
+        jDialog1.dispose();
+        return;
+    }//GEN-LAST:event_YESActionPerformed
+
+    private void NOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NOActionPerformed
+        this.setEnabled(true);
+        update(jTable1);
+        jDialog1.dispose();
+        return;
+    }//GEN-LAST:event_NOActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1075,10 +1180,12 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     private javax.swing.JButton LOGOUT;
     private javax.swing.JButton MI;
     private javax.swing.JButton MU;
+    private javax.swing.JButton NO;
     private javax.swing.JPanel PANEL;
     private javax.swing.JPanel SELECTION;
     private javax.swing.JButton TO_SEL;
     private javax.swing.JButton VOS;
+    private javax.swing.JButton YES;
     private javax.swing.JTextField cid;
     private javax.swing.JTextField cn;
     private javax.swing.JTextField desc;

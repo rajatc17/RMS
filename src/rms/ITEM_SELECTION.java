@@ -23,6 +23,9 @@ import java.applet.*;
 import java.util.*;
 import java.awt.event.*;
 import java.beans.EventHandler;
+import java.util.Date;
+import java.text.*;
+import javax.swing.*;
 /**
  *
  * @author rajat
@@ -32,7 +35,9 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     FlowLayout layout = new FlowLayout();
     Dimension d = new Dimension(233,300);
     java.util.List<JButton> db = new ArrayList<>();
-    Map<JButton,Integer> counts = new HashMap<JButton,Integer>(); 
+    java.util.List<String> code = new ArrayList<>();
+    Map<JButton,Integer> counts = new HashMap<JButton,Integer>();
+    Map<String,Integer> code_count = new HashMap<String,Integer>();
     private void enable_all()
     {
         for(JButton buttons: db)
@@ -52,7 +57,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
             counts.put(str, 1);
         }
             
-       for (Map.Entry<JButton, Integer> entry : counts.entrySet()) {
+        for (Map.Entry<JButton, Integer> entry : counts.entrySet()) {
             System.out.println(entry.getKey().getText() + " = " + entry.getValue());
             if(entry.getValue()>2)
                 entry.getKey().setEnabled(false);
@@ -60,6 +65,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
 }
 
     }
+    
     private void action(Object ob)
     {
        
@@ -68,15 +74,53 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         JLabel item = (JLabel)parent.getComponent(0);
         JLabel price = (JLabel)parent.getComponent(1);
         
-        JOptionPane.showMessageDialog(this,item.getText()+"\n"+price.getText());
         db.add(b);
-        check();
+        add_to_cart(item.getText(),price.getText(),parent.getToolTipText());
         
+        
+    }
+    private void add_to_cart(String item,String price,String icode)
+    {
+        if(code_count.containsKey(icode))
+        {
+            JOptionPane.showMessageDialog(this,"ALREADY IN CART!");
+        }
+        else if(code_count.size()>4)
+        {
+            JOptionPane.showMessageDialog(this,"CART LIMIT EXCEEDED!");
+        }
+        else
+        {
+            code_count.put(icode,1);
+            JOptionPane.showMessageDialog(this,"ADDED TO CART:\n"+icode+"\n"+item+"\n"+price);
+            cart_update(item,price,icode);
+        }
     }
     private void upd(JPanel panel)
     {
         panel.repaint();
         panel.revalidate();
+    }
+    private void cart_update(String item,String price,String icode)
+    {
+        DefaultTableModel tab = (DefaultTableModel)FC.getModel();
+        tab.setRowCount(tab.getRowCount());
+        tab.addRow(new Object[]{icode,item,price.replace("Rs.",""),1.0});
+        update_price(tab);
+    }
+    private void update_price(DefaultTableModel table)
+    {
+        double p1=0;
+        double p2=0;
+        double total=0;
+        for(int i=0;i<table.getRowCount();i++)
+        {
+            p1=Double.parseDouble(table.getValueAt(i,2).toString());
+            p2=Double.parseDouble(table.getValueAt(i, 3).toString());
+            
+            total+=p1*p2;
+        }
+        PRICE.setText("Total Price = "+total);
     }
     private void populate (JPanel parent,String type)
     {
@@ -84,13 +128,13 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         parent.setLayout(layout);
         String item="null";
         String desc="null";
+        String icode="null";
         int i=0;
         try
         { 
             JPanel[] panels = new JPanel[100];
             JLabel[] p_label = new JLabel[100];
             JLabel[] desc_label = new JLabel[100];
-            JLabel[] image = new JLabel[100];
             JButton[] buttons = new JButton[100];
             
             Connection cn=Connectivity.getConnection();
@@ -102,6 +146,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                
                 item=rs.getString("UnitPrice");
                 desc=rs.getString("Description");
+                icode=rs.getString("ICode");
           
                 p_label[i] = new JLabel("Rs."+item);
                 p_label[i].setSize(70,70);
@@ -113,18 +158,15 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 desc_label[i].setFont(new java.awt.Font("Bahnschrift", 1, 16));
                 desc_label[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 
-                
- 
                 buttons[i] = new JButton(item);
                 buttons[i].setSize(70,100);
                 buttons[i].setFont(new java.awt.Font("Bahnschrift", 1, 16));
                 buttons[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-                buttons[i].setText("B"+i);
+                buttons[i].setText("ADD TO CART");
                                               
                 buttons[i].addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 action(evt.getSource());
-               
             }
         });
                 
@@ -140,6 +182,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 upd(panels[i]);
                 panels[i].add(buttons[i]);
                 upd(panels[i]);
+                panels[i].setToolTipText(icode);
                 panels[i].setVisible(true);
                 
                 parent.add(panels[i]);
@@ -161,6 +204,8 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     }
     public ITEM_SELECTION(String cashier,String customer) {
         initComponents();
+        FC.getTableHeader().setFont(new Font("Bahnschrift", Font.BOLD, 14));
+        FC.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         try
         {
             Statement stmt = connectdata();
@@ -208,7 +253,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         jLabel7 = new javax.swing.JLabel();
         WELCOME1 = new javax.swing.JLabel();
         WELCOME = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        cart_reset = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         HEADER = new javax.swing.JLabel();
         PANEL = new javax.swing.JPanel();
@@ -218,7 +263,17 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         B = new javax.swing.JPanel();
         SPC = new javax.swing.JScrollPane();
         C = new javax.swing.JPanel();
-        D2 = new javax.swing.JPanel();
+        VC = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        FC = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        jSeparator6 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        DATE = new com.toedter.calendar.JDateChooser();
+        jButton4 = new javax.swing.JButton();
+        INC = new javax.swing.JButton();
+        DEC = new javax.swing.JButton();
+        PRICE = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Item Menu");
@@ -284,11 +339,11 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         WELCOME.setForeground(new java.awt.Color(255, 255, 255));
         WELCOME.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        jButton1.setFont(new java.awt.Font("Bahnschrift", 1, 14)); // NOI18N
-        jButton1.setText("ENABLE ALL");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cart_reset.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        cart_reset.setText("RESET CART");
+        cart_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cart_resetActionPerformed(evt);
             }
         });
 
@@ -324,15 +379,13 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(82, 82, 82)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jSeparator4, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(cart_reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(153, 153, 153)
-                        .addComponent(jLabel7))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addComponent(jButton1)))
+                        .addComponent(jLabel7)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -360,9 +413,9 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 .addComponent(VO1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jButton1)
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(cart_reset, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 700));
@@ -405,22 +458,138 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
 
         PANEL.add(SPB, "card5");
 
+        SPC.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         SPC.setViewportView(C);
 
         PANEL.add(SPC, "card5");
 
-        javax.swing.GroupLayout D2Layout = new javax.swing.GroupLayout(D2);
-        D2.setLayout(D2Layout);
-        D2Layout.setHorizontalGroup(
-            D2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 980, Short.MAX_VALUE)
+        FC.setBackground(new java.awt.Color(0, 0, 0));
+        FC.setFont(new java.awt.Font("Bahnschrift", 1, 14)); // NOI18N
+        FC.setForeground(new java.awt.Color(255, 255, 255));
+        FC.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Item Code", "Description", "Unit Price", "Quantity"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        FC.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        FC.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        FC.setRowHeight(25);
+        jScrollPane1.setViewportView(FC);
+
+        jPanel4.setBackground(new java.awt.Color(0, 0, 0));
+
+        jLabel3.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("SET ORDER DATE");
+
+        DATE.setDateFormatString("dd-MMM-yyyy");
+        DATE.setFocusTraversalPolicyProvider(true);
+        DATE.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+
+        jButton4.setBackground(new java.awt.Color(255, 0, 0));
+        jButton4.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        jButton4.setText("CONTINUE");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        INC.setBackground(new java.awt.Color(0, 0, 0));
+        INC.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        INC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rms/image/icons8_add_70px_3.png"))); // NOI18N
+        INC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                INCActionPerformed(evt);
+            }
+        });
+
+        DEC.setBackground(new java.awt.Color(0, 0, 0));
+        DEC.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        DEC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rms/image/icons8_minus_57px_1.png"))); // NOI18N
+        DEC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DECActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(107, 107, 107)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DATE, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(INC, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(96, 96, 96)
+                .addComponent(DEC, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(138, 138, 138)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
-        D2Layout.setVerticalGroup(
-            D2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 610, Short.MAX_VALUE)
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel3)
+                .addGap(2, 2, 2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton4)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(DATE, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(DEC, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(INC, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34))
         );
 
-        PANEL.add(D2, "card5");
+        PRICE.setFont(new java.awt.Font("Bahnschrift", 1, 36)); // NOI18N
+        PRICE.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout VCLayout = new javax.swing.GroupLayout(VC);
+        VC.setLayout(VCLayout);
+        VCLayout.setHorizontalGroup(
+            VCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(VCLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(PRICE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        VCLayout.setVerticalGroup(
+            VCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VCLayout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PRICE, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        PANEL.add(VC, "card5");
 
         jPanel1.add(PANEL, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 90, 980, 610));
 
@@ -466,14 +635,71 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     private void VO1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VO1ActionPerformed
         HEADER.setText("Order Cart");
         PANEL.removeAll();
-        PANEL.add(D2);
+        PANEL.add(VC);
         PANEL.repaint();
         PANEL.revalidate();
     }//GEN-LAST:event_VO1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       enable_all();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       Format formatter = new SimpleDateFormat("dd-MMM-yyyy");
+       String s = formatter.format(DATE.getDate());
+       JOptionPane.showMessageDialog(this,s);
+       
+       /*if(date.equals(""))
+       {
+           JOptionPane.showMessageDialog(this,"PLEASE SELECT A DATE");
+       }*/
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void cart_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cart_resetActionPerformed
+        code_count.clear();
+        DefaultTableModel tab = (DefaultTableModel)FC.getModel();
+        tab.setRowCount(0);
+        PRICE.setText("");
+    }//GEN-LAST:event_cart_resetActionPerformed
+
+    private void INCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_INCActionPerformed
+        if(FC.getSelectionModel().isSelectionEmpty())
+       {
+           JOptionPane.showMessageDialog(this,"NO CART ITEM SELECTED!");
+       }
+       else
+        {
+            int row = FC.getSelectedRow();
+            if(Double.parseDouble(FC.getValueAt(row, 3).toString())>=5)
+                {
+                    JOptionPane.showMessageDialog(this,"MAX QUANTITY REACHED FOR THE ITEM!");
+                    return;
+                }
+            Double new_val = Double.parseDouble(FC.getValueAt(row, 3).toString())+1;
+            System.out.print(new_val);
+            FC.setValueAt(new_val.toString(), row, 3);
+            update_price((DefaultTableModel)FC.getModel());
+        }
+    }//GEN-LAST:event_INCActionPerformed
+
+    private void DECActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DECActionPerformed
+        if(FC.getSelectionModel().isSelectionEmpty())
+       {
+           JOptionPane.showMessageDialog(this,"NO CART ITEM SELECTED!");
+       }
+       else
+        {
+            int row = FC.getSelectedRow();
+            if(Double.parseDouble(FC.getValueAt(row, 3).toString())==1)
+                {
+                    JOptionPane.showMessageDialog(this,"ITEM WILL BE REMOVED.");
+                    DefaultTableModel t = (DefaultTableModel)FC.getModel();
+                    t.removeRow(row);
+                    update_price((DefaultTableModel)FC.getModel());
+                    return;
+                }
+            Double new_val = Double.parseDouble(FC.getValueAt(row, 3).toString())-1;
+            System.out.print(new_val);
+            FC.setValueAt(new_val.toString(), row, 3);
+            update_price((DefaultTableModel)FC.getModel());
+        }
+    }//GEN-LAST:event_DECActionPerformed
 
     /**
      * @param args the command line arguments
@@ -515,26 +741,36 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     private javax.swing.JPanel A;
     private javax.swing.JPanel B;
     private javax.swing.JPanel C;
-    private javax.swing.JPanel D2;
+    private com.toedter.calendar.JDateChooser DATE;
+    private javax.swing.JButton DEC;
+    private javax.swing.JTable FC;
     private javax.swing.JLabel HEADER;
+    private javax.swing.JButton INC;
     private javax.swing.JButton MC;
     private javax.swing.JPanel PANEL;
+    private javax.swing.JLabel PRICE;
     private javax.swing.JScrollPane SPA;
     private javax.swing.JScrollPane SPB;
     private javax.swing.JScrollPane SPC;
     private javax.swing.JButton TO;
+    private javax.swing.JPanel VC;
     private javax.swing.JButton VO;
     private javax.swing.JButton VO1;
     private javax.swing.JLabel WELCOME;
     private javax.swing.JLabel WELCOME1;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton cart_reset;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator6;
     // End of variables declaration//GEN-END:variables
 }

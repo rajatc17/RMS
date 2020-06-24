@@ -81,6 +81,11 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        dr = new javax.swing.JLabel();
+        HEADER2 = new javax.swing.JLabel();
+        YES = new javax.swing.JButton();
+        NO = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         SELECTION = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -130,6 +135,63 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         TO_GOTO = new javax.swing.JButton();
         C = new javax.swing.JPanel();
         D = new javax.swing.JPanel();
+
+        jDialog1.setTitle("Message");
+        jDialog1.setIconImage(new ImageIcon(getClass().getResource("image/icons8_box_important_60px_1.png")).getImage());
+
+        dr.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        dr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        HEADER2.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        HEADER2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        HEADER2.setText("DELETE THE FOLLOWING RECORD:");
+
+        YES.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        YES.setText("YES");
+        YES.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                YESActionPerformed(evt);
+            }
+        });
+
+        NO.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        NO.setText("NO");
+        NO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NOActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(HEADER2, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+                    .addComponent(dr, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(YES, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(NO, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(129, 129, 129))
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(HEADER2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dr, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(YES, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NO, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Restaurant Client Server");
@@ -816,7 +878,27 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     }//GEN-LAST:event_LOGOUTActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+        if(jTable1.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this,"PLEASE SELECT A TUPLE TO CONTINUE!");
+            return;
+        }
+       else
+       {
+           
+           int row = jTable1.getSelectedRow();
+           String value = "CID : "+jTable1.getModel().getValueAt(row,0).toString()+
+            "\n CName : "+jTable1.getModel().getValueAt(row,1).toString()+
+            "\n TPNo: "+jTable1.getModel().getValueAt(row,2).toString()+
+            "\n Address: "+jTable1.getModel().getValueAt(row,3).toString();
+           dr.setText(value);
+           
+           jDialog1.setLocationRelativeTo(null);
+           jDialog1.setSize(750,210);
+           jDialog1.setVisible(true);
+           jDialog1.setEnabled(true);
+           this.setEnabled(false);
+       }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -873,6 +955,37 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
        }
     }//GEN-LAST:event_TO_GOTOActionPerformed
 
+    private void YESActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_YESActionPerformed
+        this.setEnabled(true);
+
+        int row = jTable1.getSelectedRow();
+        if(!jTable1.getSelectionModel().isSelectionEmpty())
+        {
+            String user = jTable1.getModel().getValueAt(row, 0).toString();
+            try
+            {
+                Connection con=Connectivity.getConnection();
+                PreparedStatement ps=con.prepareStatement("delete from customer where CID=?");
+                ps.setString(1,user);
+                int status=ps.executeUpdate();
+                con.close();
+            }
+            catch(Exception e){ JOptionPane.showMessageDialog(this,e);}
+        }
+
+        update(jTable1);
+        update(jTable2);
+        jDialog1.dispose();
+        return;
+    }//GEN-LAST:event_YESActionPerformed
+
+    private void NOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NOActionPerformed
+        this.setEnabled(true);
+        update(jTable1);
+        jDialog1.dispose();
+        return;
+    }//GEN-LAST:event_NOActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -915,8 +1028,10 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JPanel D;
     private javax.swing.JLabel HEADER;
     private javax.swing.JLabel HEADER1;
+    private javax.swing.JLabel HEADER2;
     private javax.swing.JButton LOGOUT;
     private javax.swing.JButton MC;
+    private javax.swing.JButton NO;
     private javax.swing.JPanel PANEL;
     private javax.swing.JPanel SELECTION;
     private javax.swing.JButton TO;
@@ -924,14 +1039,17 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JButton TO_SEL;
     private javax.swing.JButton VO;
     private javax.swing.JButton VO1;
+    private javax.swing.JButton YES;
     private javax.swing.JTextField addr;
     private javax.swing.JTextField cid;
     private javax.swing.JTextField cn;
+    private javax.swing.JLabel dr;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
