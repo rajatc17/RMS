@@ -1169,7 +1169,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
         try
         { 
             Connection cn=Connectivity.getConnection();
-            PreparedStatement ps=cn.prepareStatement("select * from item where Description like '"+src+"%'");
+            PreparedStatement ps=cn.prepareStatement("select * from item where Description like '"+src+"%' or '%"+src+"%'");
             ResultSet rs=ps.executeQuery();
             DefaultTableModel tm=(DefaultTableModel)jTable2.getModel();
             tm.setRowCount(0);
