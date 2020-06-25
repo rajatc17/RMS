@@ -48,8 +48,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         JLabel price = (JLabel)parent.getComponent(1);
         
         add_to_cart(item.getText(),price.getText(),parent.getToolTipText());
-        
-        
+      
     }
     private void add_to_cart(String item,String price,String icode)
     {
