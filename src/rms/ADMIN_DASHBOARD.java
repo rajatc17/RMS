@@ -839,17 +839,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
 
         PANEL.add(B, "card3");
 
-        javax.swing.GroupLayout CLayout = new javax.swing.GroupLayout(C);
-        C.setLayout(CLayout);
-        CLayout.setHorizontalGroup(
-            CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1020, Short.MAX_VALUE)
-        );
-        CLayout.setVerticalGroup(
-            CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
-        );
-
+        C.setLayout(new java.awt.BorderLayout());
         PANEL.add(C, "card4");
 
         jPanel1.add(PANEL, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 1020, 600));
@@ -890,6 +880,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     private void VOSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VOSActionPerformed
         HEADER.setText("View Order Summary");
         PANEL.removeAll();
+        CreateChart cc = new CreateChart("G.O.A.T SURVEY",C);
         PANEL.add(C);
         PANEL.repaint();
         PANEL.revalidate();
