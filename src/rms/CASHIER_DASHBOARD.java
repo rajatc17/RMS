@@ -44,11 +44,33 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         JOptionPane.showMessageDialog(this,e);
     }
     }
+    private void update2(JTable ob)
+    {
+        ob.getTableHeader().setFont(new Font("Bahnschrift", Font.BOLD, 14));
+        try
+        { 
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select * from orders");
+            ResultSet rs=ps.executeQuery();
+            DefaultTableModel tm=(DefaultTableModel)ob.getModel();
+            tm.setRowCount(0);
+            while(rs.next())
+            {   
+                Object o[]={rs.getString("OrderID"),rs.getString("OrderDate"),rs.getString("Amount"),rs.getString("CID"),rs.getString("Discount"),rs.getString("OrderStatus")};
+                tm.addRow(o);
+            }
+        }
+    catch(Exception e)
+    {   
+        JOptionPane.showMessageDialog(this,e);
+    }
+    }
     public CASHIER_DASHBOARD(String username) {
         this.username=username;
         initComponents();
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ORDER.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         try
         {
             Statement stmt = connectdata();
@@ -67,6 +89,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         }
         update(jTable1);
         update(jTable2);
+        update2(ORDER);
     }
 
     /**
@@ -131,6 +154,8 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         jPanel6 = new javax.swing.JPanel();
         TO_GOTO = new javax.swing.JButton();
         C = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ORDER = new javax.swing.JTable();
         D = new javax.swing.JPanel();
 
         jDialog1.setTitle("Message");
@@ -722,15 +747,42 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
 
         PANEL.add(B, "card3");
 
+        ORDER.setBackground(new java.awt.Color(0, 0, 0));
+        ORDER.setFont(new java.awt.Font("Bahnschrift", 1, 14)); // NOI18N
+        ORDER.setForeground(new java.awt.Color(255, 255, 255));
+        ORDER.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Order ID", "Order Date", "Amount", "CID", "Discount Applied", "Order Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        ORDER.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        ORDER.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        ORDER.setRowHeight(25);
+        jScrollPane3.setViewportView(ORDER);
+
         javax.swing.GroupLayout CLayout = new javax.swing.GroupLayout(C);
         C.setLayout(CLayout);
         CLayout.setHorizontalGroup(
             CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1010, Short.MAX_VALUE)
+            .addComponent(jScrollPane3)
         );
         CLayout.setVerticalGroup(
             CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(CLayout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 56, Short.MAX_VALUE))
         );
 
         PANEL.add(C, "card4");
@@ -1029,6 +1081,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JButton LOGOUT;
     private javax.swing.JButton MC;
     private javax.swing.JButton NO;
+    private javax.swing.JTable ORDER;
     private javax.swing.JPanel PANEL;
     private javax.swing.JPanel SELECTION;
     private javax.swing.JButton TO;
@@ -1062,6 +1115,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
