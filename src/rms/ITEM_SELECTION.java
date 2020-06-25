@@ -34,37 +34,10 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
 
     FlowLayout layout = new FlowLayout();
     Dimension d = new Dimension(233,300);
-    java.util.List<JButton> db = new ArrayList<>();
+ 
     java.util.List<String> code = new ArrayList<>();
-    Map<JButton,Integer> counts = new HashMap<JButton,Integer>();
+   
     Map<String,Integer> code_count = new HashMap<String,Integer>();
-    private void enable_all()
-    {
-        for(JButton buttons: db)
-        {
-            buttons.setEnabled(true);
-        }
-        db.clear();
-        counts.clear();
-        upd(PANEL);
-    }
-    private void check()
-    {
-        for (JButton str : db) {
-            if (counts.containsKey(str)) {
-            counts.put(str, counts.get(str) + 1);
-    }   else {
-            counts.put(str, 1);
-        }
-            
-        for (Map.Entry<JButton, Integer> entry : counts.entrySet()) {
-            System.out.println(entry.getKey().getText() + " = " + entry.getValue());
-            if(entry.getValue()>2)
-                entry.getKey().setEnabled(false);
-        }
-}
-
-    }
     
     private void action(Object ob)
     {
@@ -74,7 +47,6 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         JLabel item = (JLabel)parent.getComponent(0);
         JLabel price = (JLabel)parent.getComponent(1);
         
-        db.add(b);
         add_to_cart(item.getText(),price.getText(),parent.getToolTipText());
         
         
