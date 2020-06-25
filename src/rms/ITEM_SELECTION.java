@@ -4,28 +4,13 @@
  * and open the template in the editor.
  */
 package rms;
-import java.math.*;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.ImageIcon;
 import java.awt.*;
-import java.awt.Color;
-import java.awt.event.KeyListener;
 import java.sql.*;
-import javax.swing.border.Border;
-import java.awt.Component;
-import java.awt.Container;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import java.awt.*;
-import java.applet.*;
-import java.util.*;
-import java.awt.event.*;
-import java.beans.EventHandler;
-import java.util.Date;
 import java.text.*;
+import java.util.*;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author rajat

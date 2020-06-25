@@ -4,10 +4,8 @@
  * and open the template in the editor.
  */
 package rms;
-import javax.swing.ImageIcon;
-import java.awt.Color;
-import java.awt.event.KeyListener;
 import java.sql.*;
+import javax.swing.ImageIcon;
 /**
  *
  * @author rajat

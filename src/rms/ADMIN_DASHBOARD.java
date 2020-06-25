@@ -4,13 +4,10 @@
  * and open the template in the editor.
  */
 package rms;
+import java.awt.Font;
+import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.ImageIcon;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.KeyListener;
-import java.sql.*;
 /**
  *
  * @author rajat

@@ -6,12 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import javax.swing.ImageIcon;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 
 public class VIEW_TEST extends JFrame implements Connectivity{
 
