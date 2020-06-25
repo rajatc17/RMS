@@ -232,6 +232,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         jButton4 = new javax.swing.JButton();
         INC = new javax.swing.JButton();
         DEC = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         PRICE = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -493,6 +494,14 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Bahnschrift", 1, 12)); // NOI18N
+        jButton1.setText("RESET DATE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -510,6 +519,10 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 .addGap(138, 138, 138)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(182, 182, 182)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -523,8 +536,10 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                         .addGap(5, 5, 5)
                         .addComponent(DATE, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,7 +569,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PRICE, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addComponent(PRICE, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -610,17 +625,20 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     }//GEN-LAST:event_VO1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       if(DATE.getDate()==null)
+       {
+            JOptionPane.showMessageDialog(this,"PLEASE SELECT A DATE!");
+            return;
+       }
+        
        Format formatter = new SimpleDateFormat("dd-MMM-yyyy");
        String s = formatter.format(DATE.getDate());
        JOptionPane.showMessageDialog(this,s);
        
-       /*if(date.equals(""))
-       {
-           JOptionPane.showMessageDialog(this,"PLEASE SELECT A DATE");
-       }*/
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void cart_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cart_resetActionPerformed
+
         code_count.clear();
         DefaultTableModel tab = (DefaultTableModel)FC.getModel();
         tab.setRowCount(0);
@@ -682,6 +700,10 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         ob.setVisible(true);
     }//GEN-LAST:event_BACKActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DATE.setDate(null);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -741,6 +763,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     private javax.swing.JLabel WELCOME;
     private javax.swing.JLabel WELCOME1;
     private javax.swing.JButton cart_reset;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
