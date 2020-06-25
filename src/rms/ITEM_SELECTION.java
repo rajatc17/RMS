@@ -175,7 +175,20 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
             rs.next();
             String type=rs.getString(1);
             WELCOME.setText(user+"("+type+")");
-            WELCOME1.setText(customer);
+            
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this,e);
+        }
+        
+        try
+        {
+            Statement stmt = connectdata();
+            ResultSet rs = stmt.executeQuery("Select CName from customer where CID = '"+ customer +"'");
+            rs.next();
+            String cname = rs.getString("CName");
+            WELCOME1.setText(cname);
         }
         catch(Exception e)
         {

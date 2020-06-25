@@ -947,7 +947,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
                           "\nAddress : "+jTable2.getModel().getValueAt(row,3).toString();
            JOptionPane.showMessageDialog(this,value);
            this.dispose();
-           animate(jTable2.getModel().getValueAt(row,1).toString());
+           animate(jTable2.getModel().getValueAt(row,0).toString());
         
        }
     }//GEN-LAST:event_TO_GOTOActionPerformed
