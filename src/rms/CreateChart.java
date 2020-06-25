@@ -34,8 +34,8 @@ public class CreateChart {
     public  PieDataset createDataset()
     {
         DefaultPieDataset data = new DefaultPieDataset();
-        data.setValue("EMINEM", 90);
-        data.setValue("OTHER", 10);
+        data.setValue("EMINEM", 95);
+        data.setValue("OTHER", 5);
         return data;
     }
     public JFreeChart createChart(PieDataset dataset,String title)
