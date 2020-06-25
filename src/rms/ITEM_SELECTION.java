@@ -92,6 +92,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
         else
         {
             code_count.put(icode,1);
+            this.code_count=code_count;
             JOptionPane.showMessageDialog(this,"ADDED TO CART:\n"+icode+"\n"+item+"\n"+price);
             cart_update(item,price,icode);
         }
@@ -698,10 +699,16 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
        }
        else
         {
+            
             int row = FC.getSelectedRow();
             if(Double.parseDouble(FC.getValueAt(row, 3).toString())==1)
                 {
                     JOptionPane.showMessageDialog(this,"ITEM WILL BE REMOVED.");
+                    
+                    try{
+                        code_count.remove(FC.getValueAt(row, 0).toString());
+                    }catch(Exception e){ JOptionPane.showMessageDialog(this,e);}
+                    
                     DefaultTableModel t = (DefaultTableModel)FC.getModel();
                     t.removeRow(row);
                     update_price((DefaultTableModel)FC.getModel());
