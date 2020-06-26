@@ -142,6 +142,11 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         ft = new javax.swing.JComboBox<>();
         C = new javax.swing.JPanel();
+        PIE = new javax.swing.JPanel();
+        jButton11 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        jButton14 = new javax.swing.JButton();
 
         jDialog1.setTitle("Message");
         jDialog1.setIconImage(new ImageIcon(getClass().getResource("image/icons8_box_important_60px_1.png")).getImage());
@@ -414,6 +419,11 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
         cn.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
         cn.setForeground(new java.awt.Color(255, 255, 255));
         cn.setBorder(null);
+        cn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cnKeyReleased(evt);
+            }
+        });
 
         ph.setBackground(new java.awt.Color(0, 0, 0));
         ph.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
@@ -839,7 +849,69 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
 
         PANEL.add(B, "card3");
 
-        C.setLayout(new java.awt.BorderLayout());
+        PIE.setLayout(new java.awt.BorderLayout());
+
+        jButton11.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        jButton11.setText("PIZZA");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        jButton12.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        jButton12.setText("GARLIC BREAD");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
+        jButton13.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        jButton13.setText("BEVERAGE");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
+        jButton14.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        jButton14.setText("ALL ITEMS");
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout CLayout = new javax.swing.GroupLayout(C);
+        C.setLayout(CLayout);
+        CLayout.setHorizontalGroup(
+            CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(PIE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(CLayout.createSequentialGroup()
+                .addContainerGap(103, Short.MAX_VALUE)
+                .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
+        );
+        CLayout.setVerticalGroup(
+            CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CLayout.createSequentialGroup()
+                .addComponent(PIE, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
         PANEL.add(C, "card4");
 
         jPanel1.add(PANEL, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 1020, 600));
@@ -880,7 +952,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     private void VOSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VOSActionPerformed
         HEADER.setText("View Order Summary");
         PANEL.removeAll();
-        CreateChart cc = new CreateChart("G.O.A.T SURVEY",C);
+        CreateChart cc = new CreateChart("ALL TOP SELLING",PIE);
         PANEL.add(C);
         PANEL.repaint();
         PANEL.revalidate();
@@ -923,7 +995,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if(cid.getText().equals(""))
-        JOptionPane.showMessageDialog(this,"ENTER USERNAME TO SEARCH RECORDS");
+        JOptionPane.showMessageDialog(this,"ENTER USERNAME TO SEARCH RECORDS OR TYPE IN NAME BOX TO SEARCH");
         else
         {
             try
@@ -1053,11 +1125,51 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        if(ic.getText().equals(""))
+        JOptionPane.showMessageDialog(this,"ENTER ITEM TO SEARCH RECORDS OR SEARCH BY TYPING IN ITEM DESCRIPTION");
+        else
+        {
+            try
+            {
+                Connection cn=Connectivity.getConnection();
+                PreparedStatement ps=cn.prepareStatement("select * from item where ICode='"+ic.getText()+"'");
+                ResultSet rs=ps.executeQuery();
+                DefaultTableModel tm=(DefaultTableModel)jTable2.getModel();
+                tm.setRowCount(0);
+                if (rs.next() == false)
+                {
+                    JOptionPane.showMessageDialog(this,"NO RECORDS FOUND");
+                    tm.addRow(new Object[4]);
+                    return;
+                }
+                rs.beforeFirst();
+                while(rs.next())
+                {
+                    Object o[]={rs.getString("ICode"),rs.getString("Description"),rs.getDouble("UnitPrice"),rs.getString("ItemType")};
+                    tm.addRow(o);
+                }
+            }
+            catch(Exception e)
+            {
+                JOptionPane.showMessageDialog(this,e);
+            }
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+        if(jTable2.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this,"NO TUPLE SELECTED!");
+        }
+        else
+        {
+            int row = jTable2.getSelectedRow();
+            String value = "ICode: "+jTable2.getModel().getValueAt(row,0).toString()+
+            "\nDescription: "+jTable2.getModel().getValueAt(row,1).toString()+
+            "\nUnitPrice: "+jTable2.getModel().getValueAt(row,2).toString()+
+            "\nType: "+jTable2.getModel().getValueAt(row,3).toString();
+            JOptionPane.showMessageDialog(this,value);
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -1090,7 +1202,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     }//GEN-LAST:event_upActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
+       update2(jTable2);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void YESActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_YESActionPerformed
@@ -1173,6 +1285,47 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_descKeyReleased
 
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        PIE.removeAll();
+        CreatChartPizza ob = new CreatChartPizza("TOP SELLING PIZZA",PIE);
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        PIE.removeAll();
+        CreateChartGB ob = new CreateChartGB("TOP SELLING GARLIC BREAD",PIE);
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        PIE.removeAll();
+        CreateChartB ob = new CreateChartB("TOP SELLING BEVERAGE",PIE);
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+       PIE.removeAll();
+       CreateChart cc = new CreateChart("ALL TOP SELLING",PIE);
+    }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void cnKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cnKeyReleased
+    String src = cn.getText();
+        try
+        { 
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select * from login where LName like '"+src+"%' or '%"+src+"%'");
+            ResultSet rs=ps.executeQuery();
+            DefaultTableModel tm=(DefaultTableModel)jTable1.getModel();
+            tm.setRowCount(0);
+            while(rs.next())
+            {   
+                Object o[]={rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)};
+                tm.addRow(o);
+            }
+        }
+    catch(Exception e)
+    {   
+        JOptionPane.showMessageDialog(this,e);
+    }
+    }//GEN-LAST:event_cnKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -1219,6 +1372,7 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     private javax.swing.JButton MU;
     private javax.swing.JButton NO;
     private javax.swing.JPanel PANEL;
+    private javax.swing.JPanel PIE;
     private javax.swing.JPanel SELECTION;
     private javax.swing.JButton TO_SEL;
     private javax.swing.JButton VOS;
@@ -1231,6 +1385,10 @@ public class ADMIN_DASHBOARD extends javax.swing.JFrame {
     private javax.swing.JTextField ic;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

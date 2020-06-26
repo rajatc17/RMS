@@ -5,6 +5,9 @@
  */
 package rms;
 import java.awt.BorderLayout;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Locale;
 import javax.swing.*;
 import org.jfree.chart.*;
@@ -12,12 +15,18 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.chart.plot.*;
 import org.jfree.util.Rotation;
+import java.util.*;
+
 
 /**
  *
  * @author rajat
  */
-public class CreateChart {
+public class CreateChart implements Connectivity{
+    
+    ArrayList<String> icodes = new ArrayList<>();
+    Map<String,Integer> code_count = new HashMap<String,Integer>();
+    Map<String,String> iname = new HashMap<String,String>();
     
     public CreateChart(String title,JPanel parent)
     {
@@ -31,11 +40,53 @@ public class CreateChart {
         parent.validate();
        
     }
+    public void init_icodes()
+    {
+        try
+        { 
+            String str=null;
+            String name=null;
+            int qty=0;
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select ICode,QTY,Description from orderdetails");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next())
+            {
+                str=rs.getString("ICode");
+                qty=rs.getInt("QTY");
+                name=rs.getString("Description");
+                
+                if(code_count.containsKey(str))
+                    code_count.put(str,code_count.get(str)+qty);
+                else
+                {
+                    code_count.put(str,qty);
+                    iname.put(str,name);
+                }
+            }
+            this.code_count = code_count;
+            
+        }
+        
+        catch(Exception e)
+        {   
+            JOptionPane.showMessageDialog(null,e);
+        }
+    }
+    public DefaultPieDataset set_data(DefaultPieDataset data)
+    {
+        for (Map.Entry<String, Integer> entry : code_count.entrySet()) 
+        {
+                data.setValue(iname.get(entry.getKey()), entry.getValue());
+        }
+        
+        return data;
+    }
     public  PieDataset createDataset()
     {
         DefaultPieDataset data = new DefaultPieDataset();
-        data.setValue("EMINEM", 95);
-        data.setValue("OTHER", 5);
+        init_icodes();
+        data = set_data(data);
         return data;
     }
     public JFreeChart createChart(PieDataset dataset,String title)

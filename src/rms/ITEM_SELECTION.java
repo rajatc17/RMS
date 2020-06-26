@@ -84,13 +84,14 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
             try
             {
                     Connection con=Connectivity.getConnection();
-                    String sql ="insert into orderdetails(OrderID,ICode,Description,UnitPrice,QTY) values (?,?,?,?,?)";
+                    String sql ="insert into orderdetails(OrderID,ICode,Description,Type,UnitPrice,QTY) values (?,?,?,?,?,?)";
                     PreparedStatement ps=con.prepareStatement(sql);
                     ps.setString(1,oid);
                     ps.setString(2,tab.getValueAt(i,0).toString());
                     ps.setString(3,tab.getValueAt(i,1).toString());
-                    ps.setDouble(4,Double.parseDouble(tab.getValueAt(i,2).toString()));
-                    ps.setInt(5,Integer.parseInt(tab.getValueAt(i,3).toString()));
+                    ps.setString(4,tab.getValueAt(i,4).toString());
+                    ps.setDouble(5,Double.parseDouble(tab.getValueAt(i,2).toString()));
+                    ps.setInt(6,Integer.parseInt(tab.getValueAt(i,3).toString()));
                     ps.execute();
                     JOptionPane.showMessageDialog(this,"Saved Successfully");
                 
@@ -177,8 +178,24 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     {
         DefaultTableModel tab = (DefaultTableModel)FC.getModel();
         tab.setRowCount(tab.getRowCount());
-        tab.addRow(new Object[]{icode,item,price.replace("Rs.",""),1});
+        tab.addRow(new Object[]{icode,item,price.replace("Rs.",""),1,get_type(icode)});
         update_price(tab);
+    }
+    private String get_type(String icode)
+    {
+        try
+        {
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select * from item where ICode='"+icode+"'");
+            ResultSet rs=ps.executeQuery();
+            rs.next();
+            return rs.getString("ItemType");
+        }
+        catch(Exception e)
+        {
+             JOptionPane.showMessageDialog(this,e);
+        }
+        return null;
     }
     private void update_price(DefaultTableModel table)
     {
@@ -579,11 +596,11 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
 
             },
             new String [] {
-                "Item Code", "Description", "Unit Price", "Quantity"
+                "Item Code", "Description", "Unit Price", "Quantity", "Food Type"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

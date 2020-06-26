@@ -65,12 +65,34 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         JOptionPane.showMessageDialog(this,e);
     }
     }
+    private void update3(JTable ob)
+    {
+        ob.getTableHeader().setFont(new Font("Bahnschrift", Font.BOLD, 14));
+        try
+        { 
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select * from orders where OrderStatus='PENDING'");
+            ResultSet rs=ps.executeQuery();
+            DefaultTableModel tm=(DefaultTableModel)ob.getModel();
+            tm.setRowCount(0);
+            while(rs.next())
+            {   
+                Object o[]={rs.getString("OrderID"),rs.getString("OrderDate"),rs.getString("Amount"),rs.getString("CID"),rs.getString("Discount"),rs.getString("OrderStatus")};
+                tm.addRow(o);
+            }
+        }
+    catch(Exception e)
+    {   
+        JOptionPane.showMessageDialog(this,e);
+    }
+    }
     public CASHIER_DASHBOARD(String username) {
         this.username=username;
         initComponents();
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         ORDER.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ORDER1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         try
         {
             Statement stmt = connectdata();
@@ -90,6 +112,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         update(jTable1);
         update(jTable2);
         update2(ORDER);
+        update3(ORDER1);
     }
 
     /**
@@ -106,7 +129,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         HEADER2 = new javax.swing.JLabel();
         YES = new javax.swing.JButton();
         NO = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
+        SSP = new javax.swing.JScrollPane();
         details = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         SELECTION = new javax.swing.JPanel();
@@ -160,6 +183,9 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         ORDER = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
         D = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        ORDER1 = new javax.swing.JTable();
+        conf = new javax.swing.JButton();
 
         jDialog1.setTitle("Message");
         jDialog1.setIconImage(new ImageIcon(getClass().getResource("image/icons8_box_important_60px_1.png")).getImage());
@@ -240,7 +266,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(details);
+        SSP.setViewportView(details);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Restaurant Client Server");
@@ -480,6 +506,11 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         cn.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
         cn.setForeground(new java.awt.Color(255, 255, 255));
         cn.setBorder(null);
+        cn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cnKeyReleased(evt);
+            }
+        });
 
         ph.setBackground(new java.awt.Color(0, 0, 0));
         ph.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
@@ -829,17 +860,59 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
 
         PANEL.add(C, "card4");
 
-        D.setBackground(new java.awt.Color(0, 0, 0));
+        D.setBackground(new java.awt.Color(204, 204, 204));
+
+        ORDER1.setBackground(new java.awt.Color(0, 0, 0));
+        ORDER1.setFont(new java.awt.Font("Bahnschrift", 1, 14)); // NOI18N
+        ORDER1.setForeground(new java.awt.Color(255, 255, 255));
+        ORDER1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Order ID", "Order Date", "Amount", "CID", "Discount Applied", "Order Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        ORDER1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        ORDER1.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        ORDER1.setRowHeight(25);
+        jScrollPane5.setViewportView(ORDER1);
+
+        conf.setBackground(new java.awt.Color(255, 0, 51));
+        conf.setFont(new java.awt.Font("Bahnschrift", 1, 24)); // NOI18N
+        conf.setText("MARK AS PAID");
+        conf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout DLayout = new javax.swing.GroupLayout(D);
         D.setLayout(DLayout);
         DLayout.setHorizontalGroup(
             DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1010, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 1010, Short.MAX_VALUE)
+            .addGroup(DLayout.createSequentialGroup()
+                .addGap(313, 313, 313)
+                .addComponent(conf, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         DLayout.setVerticalGroup(
             DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(DLayout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(conf, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 48, Short.MAX_VALUE))
         );
 
         PANEL.add(D, "card5");
@@ -903,7 +976,14 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     {
         JOptionPane.showMessageDialog(this,"ENTER ALL FIELDS");
         cid.setText("");cn.setText(username);ph.setText("");addr.setText("");
-    }   
+        update(jTable1);
+    }
+    else if(ph.getText().length()!=10)
+    {
+        JOptionPane.showMessageDialog(this,"PHONE NUMBER SHOULD BE 10 DIGITS EXACT!");
+        cid.setText("");cn.setText(username);ph.setText("");addr.setText("");
+        update(jTable1);
+    }
     else{
     try{        
     Connection con=Connectivity.getConnection();
@@ -929,7 +1009,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        if(cid.getText().equals(""))
-        JOptionPane.showMessageDialog(this,"ENTER CID TO SEARCH RECORDS");
+        JOptionPane.showMessageDialog(this,"ENTER CID TO SEARCH RECORDS OR TYPE NAME");
        else
        {
          try
@@ -1099,13 +1179,60 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
                 Object o[]={rs.getString("ICode"),rs.getString("Description"),rs.getDouble("UnitPrice"),rs.getInt("QTY")};
                 tm.addRow(o);
             }
-             JOptionPane.showMessageDialog(this,details);
+             JOptionPane.showMessageDialog(this,SSP);
         }
         catch(Exception e)
         {
             JOptionPane.showMessageDialog(this,e);
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void confActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confActionPerformed
+        if(ORDER1.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this,"PLEASE SELECT AN ORDER TO MARK!");
+            
+        }
+        else
+        {
+            int reply = JOptionPane.showConfirmDialog(this, "ARE YOU SURE YOU WANT TO CONTINUE?", "PAYMENT CONFIRMATION WINDOW",JOptionPane.YES_NO_OPTION);
+            if(reply == JOptionPane.NO_OPTION)return;
+            
+            try
+            {
+                int row = ORDER1.getSelectedRow();
+                Connection con=Connectivity.getConnection();
+                PreparedStatement ps=con.prepareStatement("update orders set OrderStatus = 'PAID' where OrderID=?");
+                ps.setString(1,ORDER1.getModel().getValueAt(row,0).toString());
+                int status=ps.executeUpdate();
+                con.close();
+            }
+            catch(Exception e){ JOptionPane.showMessageDialog(this,e);}
+        }
+        update2(ORDER);
+        update3(ORDER1);
+    }//GEN-LAST:event_confActionPerformed
+
+    private void cnKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cnKeyReleased
+        String src =cn.getText();
+        try
+        { 
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select * from Customer where CName like '"+src+"%' or '%"+src+"%'");
+            ResultSet rs=ps.executeQuery();
+            DefaultTableModel tm=(DefaultTableModel)jTable1.getModel();
+            tm.setRowCount(0);
+            while(rs.next())
+            {   
+                Object o[]={rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)};
+                tm.addRow(o);
+            }
+        }
+    catch(Exception e)
+    {   
+        JOptionPane.showMessageDialog(this,e);
+    }
+    }//GEN-LAST:event_cnKeyReleased
 
     /**
      * @param args the command line arguments
@@ -1154,8 +1281,10 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JButton MC;
     private javax.swing.JButton NO;
     private javax.swing.JTable ORDER;
+    private javax.swing.JTable ORDER1;
     private javax.swing.JPanel PANEL;
     private javax.swing.JPanel SELECTION;
+    private javax.swing.JScrollPane SSP;
     private javax.swing.JButton TO;
     private javax.swing.JButton TO_GOTO;
     private javax.swing.JButton TO_SEL;
@@ -1165,6 +1294,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JTextField addr;
     private javax.swing.JTextField cid;
     private javax.swing.JTextField cn;
+    private javax.swing.JButton conf;
     private javax.swing.JTable details;
     private javax.swing.JLabel dr;
     private javax.swing.JButton jButton1;
@@ -1190,7 +1320,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
