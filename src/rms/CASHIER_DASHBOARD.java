@@ -106,6 +106,8 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         HEADER2 = new javax.swing.JLabel();
         YES = new javax.swing.JButton();
         NO = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        details = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         SELECTION = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -156,6 +158,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         C = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         ORDER = new javax.swing.JTable();
+        jButton6 = new javax.swing.JButton();
         D = new javax.swing.JPanel();
 
         jDialog1.setTitle("Message");
@@ -214,6 +217,30 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
                     .addComponent(NO, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
+
+        details.setBackground(new java.awt.Color(0, 0, 0));
+        details.setFont(new java.awt.Font("Bahnschrift", 1, 10)); // NOI18N
+        details.setForeground(new java.awt.Color(255, 255, 255));
+        details.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Item Code", "Description", "Unit Price", "Quantity"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(details);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Restaurant Client Server");
@@ -772,17 +799,32 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         ORDER.setRowHeight(25);
         jScrollPane3.setViewportView(ORDER);
 
+        jButton6.setBackground(new java.awt.Color(255, 51, 51));
+        jButton6.setFont(new java.awt.Font("Bahnschrift", 1, 24)); // NOI18N
+        jButton6.setText("Get Order Details");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout CLayout = new javax.swing.GroupLayout(C);
         C.setLayout(CLayout);
         CLayout.setHorizontalGroup(
             CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1010, Short.MAX_VALUE)
+            .addGroup(CLayout.createSequentialGroup()
+                .addGap(364, 364, 364)
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         CLayout.setVerticalGroup(
             CLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 56, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 98, Short.MAX_VALUE))
         );
 
         PANEL.add(C, "card4");
@@ -1035,6 +1077,36 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
         return;
     }//GEN-LAST:event_NOActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if(ORDER.getSelectionModel().isSelectionEmpty())
+        {
+            JOptionPane.showMessageDialog(this,"PLEASE SELECT AN ORDER TO CONTINUE!");
+            return;
+        }
+        
+        
+        String oid = ORDER.getModel().getValueAt(ORDER.getSelectedRow(),0).toString();
+        details.getTableHeader().setFont(new Font("Bahnschrift", Font.BOLD, 14));
+        try
+        { 
+            Connection cn=Connectivity.getConnection();
+            PreparedStatement ps=cn.prepareStatement("select * from orderdetails where OrderID = '"+oid+"'");
+            ResultSet rs=ps.executeQuery();
+            DefaultTableModel tm=(DefaultTableModel)details.getModel();
+            tm.setRowCount(0);
+            while(rs.next())
+            {   
+                Object o[]={rs.getString("ICode"),rs.getString("Description"),rs.getDouble("UnitPrice"),rs.getInt("QTY")};
+                tm.addRow(o);
+            }
+             JOptionPane.showMessageDialog(this,details);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this,e);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1093,12 +1165,14 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JTextField addr;
     private javax.swing.JTextField cid;
     private javax.swing.JTextField cn;
+    private javax.swing.JTable details;
     private javax.swing.JLabel dr;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -1116,6 +1190,7 @@ public class CASHIER_DASHBOARD extends javax.swing.JFrame implements Connectivit
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;

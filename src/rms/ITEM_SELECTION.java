@@ -70,6 +70,51 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
             JOptionPane.showMessageDialog(this,e);
         }
          
+        add_to_order_details(order_id);
+         
+    }
+    private void add_to_order_details(String oid)
+    {
+        DefaultTableModel tab = (DefaultTableModel)FC.getModel();
+        int rows = tab.getRowCount();
+        
+        for(int i=0;i<rows;i++)
+        {
+           
+            try
+            {
+                    Connection con=Connectivity.getConnection();
+                    String sql ="insert into orderdetails(OrderID,ICode,Description,UnitPrice,QTY) values (?,?,?,?,?)";
+                    PreparedStatement ps=con.prepareStatement(sql);
+                    ps.setString(1,oid);
+                    ps.setString(2,tab.getValueAt(i,0).toString());
+                    ps.setString(3,tab.getValueAt(i,1).toString());
+                    ps.setDouble(4,Double.parseDouble(tab.getValueAt(i,2).toString()));
+                    ps.setInt(5,Integer.parseInt(tab.getValueAt(i,3).toString()));
+                    ps.execute();
+                    JOptionPane.showMessageDialog(this,"Saved Successfully");
+                
+            }
+            catch(Exception e)
+            {
+                JOptionPane.showMessageDialog(this,e);
+            }
+            
+        }
+        
+        reset();
+    }
+    private void reset()
+    {
+        code_count.clear();
+        DefaultTableModel tab = (DefaultTableModel)FC.getModel();
+        tab.setRowCount(0);
+        this.final_price=0;
+        DATE.setDate(null);
+        jButton1.setEnabled(false);
+        jButton2.setEnabled(false);
+        jButton3.setEnabled(false);
+        PRICE.setText("");
     }
     private void add_to_map()
     {
@@ -132,7 +177,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
     {
         DefaultTableModel tab = (DefaultTableModel)FC.getModel();
         tab.setRowCount(tab.getRowCount());
-        tab.addRow(new Object[]{icode,item,price.replace("Rs.",""),1.0});
+        tab.addRow(new Object[]{icode,item,price.replace("Rs.",""),1});
         update_price(tab);
     }
     private void update_price(DefaultTableModel table)
@@ -792,15 +837,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
 
     private void cart_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cart_resetActionPerformed
 
-        code_count.clear();
-        DefaultTableModel tab = (DefaultTableModel)FC.getModel();
-        tab.setRowCount(0);
-        this.final_price=0;
-        DATE.setDate(null);
-        jButton1.setEnabled(false);
-        jButton2.setEnabled(false);
-        jButton3.setEnabled(false);
-        PRICE.setText("");
+        reset();
     }//GEN-LAST:event_cart_resetActionPerformed
 
     private void INCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_INCActionPerformed
@@ -820,7 +857,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                     JOptionPane.showMessageDialog(this,"MAX QUANTITY REACHED FOR THE ITEM!");
                     return;
                 }
-            Double new_val = Double.parseDouble(FC.getValueAt(row, 3).toString())+1;
+            Integer new_val = Integer.parseInt(FC.getValueAt(row, 3).toString())+1;
             System.out.print(new_val);
             FC.setValueAt(new_val.toString(), row, 3);
             update_price((DefaultTableModel)FC.getModel());
@@ -859,7 +896,7 @@ public class ITEM_SELECTION extends javax.swing.JFrame implements Connectivity{
                     update_price((DefaultTableModel)FC.getModel());
                     return;
                 }
-            Double new_val = Double.parseDouble(FC.getValueAt(row, 3).toString())-1;
+            Integer new_val = Integer.parseInt(FC.getValueAt(row, 3).toString())-1;
             System.out.print(new_val);
             FC.setValueAt(new_val.toString(), row, 3);
             update_price((DefaultTableModel)FC.getModel());
