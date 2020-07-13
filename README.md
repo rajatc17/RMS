@@ -23,8 +23,11 @@ change the Connectivity.java file in the source code of RMS.rms project package.
 getConnection() under Connectivity.java
 
 6. Go to MySQL and run the commands :
+
+~~~sql
 create database dominos;
 use dominos;
+~~~~
 
 7. Download the database folder and run all the .sql files on your database. Make sure all the
 tables are correctly built inside your database.
@@ -36,11 +39,10 @@ Welcome.java.(VERY IMPORTANT)
 1. Strictly Run Welcome.java after doing all steps and no error should be encountered.
 
 2. FOR FAST LOGIN:
-
-- Cashier Window:User=test Pass=test
-
-- Admin Window:User=admin Pass=admin
-
+~~~
+Cashier Window:User=test Pass=test
+Admin Window:User=admin Pass=admin
+~~~
 3. Cashier Dashboard should after success cashier login and Admin Dashboard should open
 after successful admin login.
 
