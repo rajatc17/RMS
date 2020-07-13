@@ -1,12 +1,10 @@
 # Restaurant Management
 
-CS 262 PROJECT
-
 A database driven application,created for the lab course evaluation of the 4th semester.
 
 ## PROJECT INSTRUCTIONS
 
-1. Download Apache Netbeans 11.3+ and MySQL Community Edition 8.0.19+..
+1. Download Apache Netbeans 11.3+(recommended) and MySQL Community Edition 8.0.19+(essential)
 
 2. Download MySQL and JDBC MySQL connector (if not already downloaded with netbeans)
 which is compatible with your Netbeans version. ( use mysql-connector-java-8.0.19+ to ensure
