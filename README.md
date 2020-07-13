@@ -31,6 +31,7 @@ use dominos;
 
 7. Download the database folder and run all the .sql files on your database. Make sure all the
 tables are correctly built inside your database.
+
 8. Click on Run project button and choose rms.Welcome.java as main class or run
 Welcome.java.(VERY IMPORTANT)
 
