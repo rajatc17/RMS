@@ -22,7 +22,7 @@ change the Connectivity.java file in the source code of RMS.rms project package.
 ‘root’ & ‘root’ your localhost:3306 username and password in both connectData() and
 getConnection() under Connectivity.java
 
-6. Go to MySQL and run the commands :
+6. Go to MySQL Workbench or Shell and run the commands :
 
 ~~~sql
 create database dominos;
