@@ -1,6 +1,6 @@
 # Restaurant Management
 
-A database driven application,created for the lab course evaluation of the 4th semester.
+A database driven application,created for a lab course.
 
 ## PROJECT INSTRUCTIONS
 
