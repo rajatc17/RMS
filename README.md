@@ -1,4 +1,4 @@
-# Restaurant Management
+# Restaurant Cashier Bill Desk
 
 A database driven application,created for a lab course.
 
